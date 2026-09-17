@@ -48,8 +48,8 @@ Bước 2: Chạy phía Frontend (WinForms Client)
 3.	Thử nghiệm các chức năng: Tải danh sách, Thêm mới, Sửa, Xóa và Tìm kiếm nhóm hàng.
 
 👨‍💻 5. Tác giả
-●	Họ tên sinh viên: [Điền tên của bạn vào đây]
+●	Họ tên sinh viên: [TRỊNH QUANG THUẬN]
 ●	
-●	Mã sinh viên: [Điền MSSV]
+●	Mã sinh viên: [2124110106]
 ●	
-●	Lớp học phần: [Điền tên lớp]
+●	Lớp học phần: [CCQ2411D]
