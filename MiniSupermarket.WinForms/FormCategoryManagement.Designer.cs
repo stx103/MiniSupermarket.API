@@ -35,6 +35,7 @@
             btnUpdate = new Button();
             btnAdd = new Button();
             btnLoad = new Button();
+            btnCustomers = new Button();
             grpSearch = new GroupBox();
             grpCategoryList = new GroupBox();
             grpCategoryInfo = new GroupBox();
@@ -157,6 +158,17 @@
             btnLoad.UseVisualStyleBackColor = true;
             btnLoad.Click += btnLoad_Click;
             // 
+            // btnCustomers
+            //
+            btnCustomers.Location = new Point(17, 410);
+            btnCustomers.Margin = new Padding(3, 4, 3, 4);
+            btnCustomers.Name = "btnCustomers";
+            btnCustomers.Size = new Size(245, 35);
+            btnCustomers.TabIndex = 9;
+            btnCustomers.Text = "Quản lý khách hàng";
+            btnCustomers.UseVisualStyleBackColor = true;
+            btnCustomers.Click += btnCustomers_Click;
+            //
             // grpSearch
             // 
             grpSearch.Controls.Add(txtKeyword);
@@ -195,6 +207,7 @@
             grpCategoryInfo.Controls.Add(btnAdd);
             grpCategoryInfo.Controls.Add(btnUpdate);
             grpCategoryInfo.Controls.Add(btnDelete);
+            grpCategoryInfo.Controls.Add(btnCustomers);
             grpCategoryInfo.Location = new Point(611, 113);
             grpCategoryInfo.Margin = new Padding(3, 4, 3, 4);
             grpCategoryInfo.Name = "grpCategoryInfo";
@@ -233,8 +246,9 @@
             // 
             // FormCategoryManagement
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Font = new Font("Segoe UI", 9F);
             ClientSize = new Size(914, 600);
             Controls.Add(grpSearch);
             Controls.Add(grpCategoryList);
@@ -279,6 +293,7 @@
         private Button btnUpdate;
         private Button btnAdd;
         private Button btnLoad;
+        private Button btnCustomers;
 
         // =========================================================
         // GROUPBOX

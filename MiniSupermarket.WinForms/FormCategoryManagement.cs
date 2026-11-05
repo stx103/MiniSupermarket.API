@@ -17,14 +17,13 @@ namespace MiniSupermarket.WinForms
     // =============================================================
     public partial class FormCategoryManagement : Form
     {
-        private static readonly HttpClient _client = new HttpClient
-        {
-            BaseAddress = new Uri("https://localhost:7163/api/")
-        };
-
         public FormCategoryManagement()
         {
             InitializeComponent();
+            btnCustomers.Visible = false;
+            AutoScroll = true;
+            AutoScrollMinSize = ClientSize;
+            WorkspaceUi.ApplyRolePermissions(this, "Category");
         }
 
         // Khi Form mở
@@ -38,21 +37,7 @@ namespace MiniSupermarket.WinForms
         // =========================================================
         private HttpClient GetAuthenticatedClient()
         {
-            var client = new HttpClient
-            {
-                BaseAddress = new Uri("https://localhost:7163/api/")
-            };
-
-            // Gắn Bearer Token vào Header
-            if (!string.IsNullOrEmpty(SessionManager.JwtToken))
-            {
-                client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue(
-                        "Bearer",
-                        SessionManager.JwtToken);
-            }
-
-            return client;
+            return ApiClientService.CreateAuthenticatedClient();
         }
 
         // =========================================================
@@ -60,25 +45,18 @@ namespace MiniSupermarket.WinForms
         // =========================================================
         private async Task LoadDataAsync()
         {
+            if (!WorkspaceUi.ApplyRolePermissions(this, "Category")) return;
             try
             {
-                // Tạo HttpClient đã được gắn JWT Token
-                using var client = GetAuthenticatedClient();
-
-                var categories =
-                    await client.GetFromJsonAsync<List<CategoryDto>>("categories");
-
+                var categories = await ApiClientService.GetAsync<List<CategoryDto>>("categories");
+                if (IsDisposed) return;
                 dgvCategories.DataSource = categories;
 
                 FormatDataGridView();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Lỗi kết nối Server:\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                WorkspaceUi.Error(ex);
             }
         }
 
@@ -172,10 +150,11 @@ namespace MiniSupermarket.WinForms
         // =========================================================
         private async void btnAdd_Click(object sender, EventArgs e)
         {
+            if (!WorkspaceUi.ApplyRolePermissions(this, "Category")) return;
             if (string.IsNullOrWhiteSpace(txtCategoryName.Text))
             {
                 MessageBox.Show(
-                    "Vui lòng nhập tên nhóm hàng!",
+                    "400 - Vui lòng nhập tên nhóm hàng!",
                     "Cảnh báo",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -192,36 +171,18 @@ namespace MiniSupermarket.WinForms
                     Description = txtDescription.Text.Trim()
                 };
 
-                var response =
-                    await _client.PostAsJsonAsync("categories", newCat);
+                using var client = GetAuthenticatedClient();
 
-                if (response.IsSuccessStatusCode)
-                {
-                    MessageBox.Show(
-                        "Thêm mới thành công!",
-                        "Thông báo",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-
-                    await LoadDataAsync();
-                    ClearInputs();
-                }
-                else
-                {
-                    MessageBox.Show(
-                        "Thêm mới thất bại!",
-                        "Lỗi",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
+                using var response =
+                    await client.PostAsJsonAsync("categories", newCat);
+                await ApiClientService.EnsureSuccessAsync(response);
+                WorkspaceUi.Success(response, "Thêm nhóm hàng thành công.");
+                await LoadDataAsync();
+                ClearInputs();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Lỗi:\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                WorkspaceUi.Error(ex);
             }
         }
 
@@ -230,10 +191,11 @@ namespace MiniSupermarket.WinForms
         // =========================================================
         private async void btnUpdate_Click(object sender, EventArgs e)
         {
+            if (!WorkspaceUi.ApplyRolePermissions(this, "Category")) return;
             if (string.IsNullOrWhiteSpace(txtId.Text))
             {
                 MessageBox.Show(
-                    "Vui lòng chọn nhóm hàng cần sửa!",
+                    "400 - Vui lòng chọn nhóm hàng cần sửa!",
                     "Cảnh báo",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -244,7 +206,7 @@ namespace MiniSupermarket.WinForms
             if (!int.TryParse(txtId.Text, out int id))
             {
                 MessageBox.Show(
-                    "Mã ID không hợp lệ!",
+                    "400 - Mã nhóm hàng không hợp lệ!",
                     "Lỗi",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -255,7 +217,7 @@ namespace MiniSupermarket.WinForms
             if (string.IsNullOrWhiteSpace(txtCategoryName.Text))
             {
                 MessageBox.Show(
-                    "Vui lòng nhập tên nhóm hàng!",
+                    "400 - Vui lòng nhập tên nhóm hàng!",
                     "Cảnh báo",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -272,38 +234,20 @@ namespace MiniSupermarket.WinForms
                     Description = txtDescription.Text.Trim()
                 };
 
-                var response =
-                    await _client.PutAsJsonAsync(
+                using var client = GetAuthenticatedClient();
+
+                using var response =
+                    await client.PutAsJsonAsync(
                         $"categories/{id}",
                         updateCat);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    MessageBox.Show(
-                        "Cập nhật thành công!",
-                        "Thông báo",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-
-                    await LoadDataAsync();
-                    ClearInputs();
-                }
-                else
-                {
-                    MessageBox.Show(
-                        "Cập nhật thất bại!",
-                        "Lỗi",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
+                await ApiClientService.EnsureSuccessAsync(response);
+                WorkspaceUi.Success(response, "Cập nhật nhóm hàng thành công.");
+                await LoadDataAsync();
+                ClearInputs();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Lỗi:\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                WorkspaceUi.Error(ex);
             }
         }
 
@@ -312,10 +256,11 @@ namespace MiniSupermarket.WinForms
         // =========================================================
         private async void btnDelete_Click(object sender, EventArgs e)
         {
+            if (!WorkspaceUi.ApplyRolePermissions(this, "Category")) return;
             if (string.IsNullOrWhiteSpace(txtId.Text))
             {
                 MessageBox.Show(
-                    "Vui lòng chọn nhóm hàng cần xóa!",
+                    "400 - Vui lòng chọn nhóm hàng cần xóa!",
                     "Cảnh báo",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -326,7 +271,7 @@ namespace MiniSupermarket.WinForms
             if (!int.TryParse(txtId.Text, out int id))
             {
                 MessageBox.Show(
-                    "Mã ID không hợp lệ!",
+                    "400 - Mã nhóm hàng không hợp lệ!",
                     "Lỗi",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -345,36 +290,18 @@ namespace MiniSupermarket.WinForms
 
             try
             {
-                var response =
-                    await _client.DeleteAsync($"categories/{id}");
+                using var client = GetAuthenticatedClient();
 
-                if (response.IsSuccessStatusCode)
-                {
-                    MessageBox.Show(
-                        "Xóa thành công!",
-                        "Thông báo",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-
-                    await LoadDataAsync();
-                    ClearInputs();
-                }
-                else
-                {
-                    MessageBox.Show(
-                        "Xóa thất bại!",
-                        "Lỗi",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
+                using var response =
+                    await client.DeleteAsync($"categories/{id}");
+                await ApiClientService.EnsureSuccessAsync(response);
+                WorkspaceUi.Success(response, "Xóa nhóm hàng thành công.");
+                await LoadDataAsync();
+                ClearInputs();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Lỗi:\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                WorkspaceUi.Error(ex);
             }
         }
 
@@ -383,6 +310,7 @@ namespace MiniSupermarket.WinForms
         // =========================================================
         private async void btnSearch_Click(object sender, EventArgs e)
         {
+            if (!WorkspaceUi.ApplyRolePermissions(this, "Category")) return;
             string keyword = txtKeyword.Text.Trim();
 
             if (string.IsNullOrEmpty(keyword))
@@ -396,21 +324,23 @@ namespace MiniSupermarket.WinForms
                 string encodedKeyword =
                     Uri.EscapeDataString(keyword);
 
-                var result =
-                    await _client.GetFromJsonAsync<List<CategoryDto>>(
-                        $"categories/search?keyword={encodedKeyword}");
+                var result = await ApiClientService.GetAsync<List<CategoryDto>>(
+                    $"categories/search?keyword={encodedKeyword}");
 
                 dgvCategories.DataSource = result;
 
                 FormatDataGridView();
             }
+            catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                dgvCategories.DataSource = new List<CategoryDto>();
+                FormatDataGridView();
+                ClearInputs();
+                WorkspaceUi.Error(ex);
+            }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Không tìm thấy kết quả phù hợp!\n" + ex.Message,
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                WorkspaceUi.Error(ex);
             }
         }
 
@@ -427,6 +357,11 @@ namespace MiniSupermarket.WinForms
         private void grpCategoryList_Enter(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnCustomers_Click(object sender, EventArgs e)
+        {
+            if (FindForm()?.TopLevelControl is FormMainShell shell) shell.OpenCustomerScreen();
         }
     }
 

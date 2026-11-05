@@ -1,5 +1,6 @@
 namespace MiniSupermarket.WinForms
 {
+    // [Tiêu chí 11] Project WinForms là client riêng trong solution; khởi động giao diện và gọi backend qua ApiClientService (HttpClient).
     internal static class Program
     {
         /// <summary>
