@@ -1,61 +1,78 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using MiniSupermarket.API.Data;
+using MiniSupermarket.API.Models;
+using MiniSupermarket.API.Security;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+
 namespace MiniSupermarket.API.Controllers
 {
+    // [Tiêu chí 13] Controller xác thực riêng: POST api/auth/login; nhóm hàng và sản phẩm có controller độc lập.
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public AuthController(IConfiguration configuration)
+        private readonly SupermarketDbContext _context;
+
+        public AuthController(IConfiguration configuration, SupermarketDbContext context)
         {
             _configuration = configuration;
+            _context = context;
         }
-        // Endpoint Đăng nhập: POST /api/auth/login
+
+        // POST /api/auth/login
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginRequestDto request)
+        [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
-            // Kiểm tra tài khoản mẫu (Trong thực tế sẽ truy vấn qua EF Core / SQL Server)
-            if (request.Username == "admin" && request.Password == "123456")
+            var user = await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Username == request.Username.Trim() && u.IsActive);
+
+            if (user == null || !UserPasswords.Verify(user, request.Password))
             {
-                var token = GenerateJwtToken(request.Username, "Admin");
-                return Ok(new { success = true, token = token, role = "Admin" });
+                return Unauthorized(new
+                {
+                    success = false,
+                    message = "Sai tài khoản hoặc mật khẩu!"
+                });
             }
-            else if (request.Username == "cashier" && request.Password == "123456")
+
+            // [Tiêu chí 28] Đăng nhập đúng trả LoginResponseDto chứa JWT; sai tài khoản/mật khẩu trả HTTP 401 ở trên.
+            var token = GenerateJwtToken(user.Username, user.Role);
+            return Ok(new LoginResponseDto
             {
-                var token = GenerateJwtToken(request.Username, "Cashier");
-                return Ok(new { success = true, token = token, role = "Cashier" });
-            }
-            return Unauthorized(new { success = false, message = "Sai tài khoản hoặc mật khẩu!" });
+                Success = true, Token = token, Role = user.Role, Username = user.Username, FullName = user.FullName
+            });
         }
+
+        // [Tiêu chí 28] JWT chứa tên tài khoản và Role, ký HMAC-SHA256, hết hạn sau 2 giờ để backend xác thực và phân quyền.
         private string GenerateJwtToken(string username, string role)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            // Lấy khóa bí mật từ appsettings.json
             var key = Encoding.ASCII.GetBytes(_configuration["JwtSettings:Secret"] ??
-           "SupermarketSecretKeyDoAnMonHoc2026SecureString!!");
+                "SupermarketSecretKeyDoAnMonHoc2026SecureString!!");
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] {
- new Claim(ClaimTypes.Name, username),
- new Claim(ClaimTypes.Role, role)
- }),
-                Expires = DateTime.UtcNow.AddHours(2), // Thời hạn token là 2 tiếng
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
-           SecurityAlgorithms.HmacSha256Signature)
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.Role, role)
+                }),
+                Expires = DateTime.UtcNow.AddHours(2),
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature)
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
     }
-    public class LoginRequestDto
-    {
-        public string Username { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-    }
+
 }
