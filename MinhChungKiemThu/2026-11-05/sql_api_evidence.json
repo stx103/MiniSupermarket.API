@@ -1,0 +1,340 @@
+{
+  "testedAt": "2026-11-05T09:56:38.625972",
+  "database": "MinhKhangMiniSupermarket_Test_20261105",
+  "provider": "SQL Server LocalDB",
+  "before": {
+    "stock": 120,
+    "points": 150,
+    "invoices": 20
+  },
+  "redemptionBeforeCancel": {
+    "stock": 115,
+    "points": 101,
+    "invoices": 21
+  },
+  "cancelRestoresAll": true,
+  "stockRollback": {
+    "status": 409,
+    "response": {
+      "success": false,
+      "message": "Sản phẩm 2 không đủ tồn kho hoặc giá vừa thay đổi. Giao dịch đã được hoàn tác."
+    },
+    "unchanged": true
+  },
+  "pointsRollback": {
+    "status": 409,
+    "response": {
+      "success": false,
+      "message": "Không đủ điểm để đổi hoặc điểm vượt giới hạn. Giao dịch đã được hoàn tác."
+    },
+    "unchanged": true
+  },
+  "receipt": {
+    "success": true,
+    "orderId": 24,
+    "orderCode": "HD-20261105-ABDAA0CA086249CC",
+    "orderDate": "2026-11-05T09:56:38.262814+07:00",
+    "totalItems": 5,
+    "totalAmount": 60000.0,
+    "redeemedPoints": 50,
+    "discountAmount": 50000,
+    "finalAmount": 10000.0,
+    "change": 10000.0,
+    "rewardPointsAdded": 1
+  },
+  "dashboard": {
+    "date": "2026-11-05T00:00:00+07:00",
+    "todayRevenue": 40000.0,
+    "todayOrders": 3,
+    "totalOrders": 21,
+    "newCustomers": 1,
+    "lowStockProducts": 2,
+    "lowStockThreshold": 10
+  },
+  "daily": [
+    {
+      "periodStart": "2026-10-30T00:00:00",
+      "totalOrders": 3,
+      "totalRevenue": 61000.0
+    },
+    {
+      "periodStart": "2026-10-31T00:00:00",
+      "totalOrders": 3,
+      "totalRevenue": 91000.0
+    },
+    {
+      "periodStart": "2026-11-01T00:00:00",
+      "totalOrders": 3,
+      "totalRevenue": 83000.0
+    },
+    {
+      "periodStart": "2026-11-02T00:00:00",
+      "totalOrders": 3,
+      "totalRevenue": 73000.0
+    },
+    {
+      "periodStart": "2026-11-03T00:00:00",
+      "totalOrders": 3,
+      "totalRevenue": 51000.0
+    },
+    {
+      "periodStart": "2026-11-04T00:00:00",
+      "totalOrders": 3,
+      "totalRevenue": 54000.0
+    },
+    {
+      "periodStart": "2026-11-05T00:00:00",
+      "totalOrders": 3,
+      "totalRevenue": 40000.0
+    }
+  ],
+  "csvInvoiceSource": [
+    {
+      "orderId": 6,
+      "orderCode": "",
+      "orderDate": "2026-10-30T00:00:00",
+      "cashierUsername": "cashier01",
+      "customerName": "Đỗ Thị F",
+      "totalAmount": 11000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 11000.0
+    },
+    {
+      "orderId": 13,
+      "orderCode": "",
+      "orderDate": "2026-10-30T00:00:00",
+      "cashierUsername": "cashier",
+      "customerName": "Cao Văn N",
+      "totalAmount": 42000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 42000.0
+    },
+    {
+      "orderId": 20,
+      "orderCode": "",
+      "orderDate": "2026-10-30T00:00:00",
+      "cashierUsername": "cashier03",
+      "customerName": "Kiều Thị U",
+      "totalAmount": 8000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 8000.0
+    },
+    {
+      "orderId": 5,
+      "orderCode": "",
+      "orderDate": "2026-10-31T00:00:00",
+      "cashierUsername": "cashier",
+      "customerName": "Hoàng Văn E",
+      "totalAmount": 36000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 36000.0
+    },
+    {
+      "orderId": 12,
+      "orderCode": "",
+      "orderDate": "2026-10-31T00:00:00",
+      "cashierUsername": "cashier03",
+      "customerName": "Mai Thị M",
+      "totalAmount": 27000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 27000.0
+    },
+    {
+      "orderId": 19,
+      "orderCode": "",
+      "orderDate": "2026-10-31T00:00:00",
+      "cashierUsername": "cashier02",
+      "customerName": "La Văn T",
+      "totalAmount": 28000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 28000.0
+    },
+    {
+      "orderId": 4,
+      "orderCode": "",
+      "orderDate": "2026-11-01T00:00:00",
+      "cashierUsername": "cashier03",
+      "customerName": "Phạm Thị D",
+      "totalAmount": 28000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 28000.0
+    },
+    {
+      "orderId": 11,
+      "orderCode": "",
+      "orderDate": "2026-11-01T00:00:00",
+      "cashierUsername": "cashier02",
+      "customerName": "Lý Văn L",
+      "totalAmount": 16000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 16000.0
+    },
+    {
+      "orderId": 18,
+      "orderCode": "",
+      "orderDate": "2026-11-01T00:00:00",
+      "cashierUsername": "cashier01",
+      "customerName": "Đinh Thị S",
+      "totalAmount": 39000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 39000.0
+    },
+    {
+      "orderId": 3,
+      "orderCode": "",
+      "orderDate": "2026-11-02T00:00:00",
+      "cashierUsername": "cashier02",
+      "customerName": "Lê Văn C",
+      "totalAmount": 9000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 9000.0
+    },
+    {
+      "orderId": 10,
+      "orderCode": "",
+      "orderDate": "2026-11-02T00:00:00",
+      "cashierUsername": "cashier01",
+      "customerName": "Đặng Thị K",
+      "totalAmount": 12000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 12000.0
+    },
+    {
+      "orderId": 17,
+      "orderCode": "",
+      "orderDate": "2026-11-02T00:00:00",
+      "cashierUsername": "cashier",
+      "customerName": "Huỳnh Văn R",
+      "totalAmount": 52000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 52000.0
+    },
+    {
+      "orderId": 2,
+      "orderCode": "",
+      "orderDate": "2026-11-03T00:00:00",
+      "cashierUsername": "cashier01",
+      "customerName": "Trần Thị B",
+      "totalAmount": 6000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 6000.0
+    },
+    {
+      "orderId": 9,
+      "orderCode": "",
+      "orderDate": "2026-11-03T00:00:00",
+      "cashierUsername": "cashier",
+      "customerName": "Ngô Văn I",
+      "totalAmount": 20000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 20000.0
+    },
+    {
+      "orderId": 16,
+      "orderCode": "",
+      "orderDate": "2026-11-03T00:00:00",
+      "cashierUsername": "cashier03",
+      "customerName": "Trịnh Thị Q",
+      "totalAmount": 25000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 25000.0
+    },
+    {
+      "orderId": 1,
+      "orderCode": "",
+      "orderDate": "2026-11-04T00:00:00",
+      "cashierUsername": "cashier",
+      "customerName": "Nguyễn Văn A",
+      "totalAmount": 12000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 12000.0
+    },
+    {
+      "orderId": 8,
+      "orderCode": "",
+      "orderDate": "2026-11-04T00:00:00",
+      "cashierUsername": "cashier03",
+      "customerName": "Bùi Thị H",
+      "totalAmount": 24000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 24000.0
+    },
+    {
+      "orderId": 15,
+      "orderCode": "",
+      "orderDate": "2026-11-04T00:00:00",
+      "cashierUsername": "cashier02",
+      "customerName": "Chu Văn P",
+      "totalAmount": 18000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 18000.0
+    },
+    {
+      "orderId": 7,
+      "orderCode": "",
+      "orderDate": "2026-11-05T00:00:00",
+      "cashierUsername": "cashier02",
+      "customerName": "Vũ Văn G",
+      "totalAmount": 15000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 15000.0
+    },
+    {
+      "orderId": 14,
+      "orderCode": "",
+      "orderDate": "2026-11-05T00:00:00",
+      "cashierUsername": "cashier01",
+      "customerName": "Tạ Thị O",
+      "totalAmount": 15000.0,
+      "redeemedPoints": 0,
+      "discountAmount": 0.0,
+      "finalAmount": 15000.0
+    },
+    {
+      "orderId": 24,
+      "orderCode": "HD-20261105-ABDAA0CA086249CC",
+      "orderDate": "2026-11-05T09:56:38.262814",
+      "cashierUsername": "admin",
+      "customerName": "Nguyễn Văn A",
+      "totalAmount": 60000.0,
+      "redeemedPoints": 50,
+      "discountAmount": 50000.0,
+      "finalAmount": 10000.0
+    }
+  ],
+  "cashierDashboard403": true,
+  "warehouseTop5200": true,
+  "fixtureNote": "20 seed invoices dated across seven days in the isolated test database",
+  "warehouseNoFinancialData": true,
+  "testSummary": {
+    "configuration": "FeatureVerified",
+    "total": 147,
+    "passed": 147,
+    "failed": 0,
+    "skipped": 0
+  },
+  "csvUiVerified": {
+    "dataRows": 7,
+    "netRevenue": 453000,
+    "utf8Bom": true
+  }
+}

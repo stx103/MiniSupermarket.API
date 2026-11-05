@@ -1,0 +1,18 @@
+{
+  "pages": 74,
+  "pngPages": 74,
+  "previouslyInspectedPagesUnchanged": 73,
+  "changedPagesForReview": [
+    "page-74.png"
+  ],
+  "marginViolations": [],
+  "docxSHA256": "9e3aff20bb6967b116418137807f11e3eb1f518e47927ea390cd4cf8659f75cf",
+  "tests": {
+    "passed": 147,
+    "failed": 0,
+    "skipped": 0
+  },
+  "solutionProjects": 2,
+  "mainDatabaseDataPreserved": true,
+  "visualReview": "All pages inspected via contact sheets; changed page 74 inspected individually; prior 73 pages pixel-identical to inspected render"
+}

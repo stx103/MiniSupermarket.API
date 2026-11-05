@@ -1,0 +1,42 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Minh Khang: API (.NET 8)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Minh Khang: Build API",
+      "program": "${workspaceFolder}/MiniSupermarket.API/bin/Debug/net8.0/MiniSupermarket.API.dll",
+      "cwd": "${workspaceFolder}/MiniSupermarket.API",
+      "console": "internalConsole",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "https://localhost:7163;http://localhost:5167"
+      },
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+https://localhost:7163",
+        "uriFormat": "https://localhost:7163/swagger"
+      }
+    },
+    {
+      "name": "Minh Khang: WinForms (.NET 8)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Minh Khang: Build WinForms",
+      "program": "${workspaceFolder}/MiniSupermarket.WinForms/bin/Debug/net8.0-windows/MiniSupermarket.WinForms.dll",
+      "cwd": "${workspaceFolder}/MiniSupermarket.WinForms",
+      "console": "internalConsole"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Minh Khang: API + WinForms",
+      "configurations": [
+        "Minh Khang: API (.NET 8)",
+        "Minh Khang: WinForms (.NET 8)"
+      ],
+      "stopAll": true
+    }
+  ]
+}
