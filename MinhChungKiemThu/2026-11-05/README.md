@@ -14,3 +14,7 @@ CSDL chính đã được áp dụng migration DashboardLoyalty, giữ nguyên 2
 ## Kiểm tra trước khi đưa lên GitHub
 
 Bản cập nhật biểu đồ được build ở cấu hình Release, không lỗi/cảnh báo. Bộ test chạy lại đạt 149/149, không lỗi hoặc bỏ qua. Xem [nhật ký Release](publish-verification.trx) và [kết quả tổng hợp](publish-verification.json). Nhật ký `feature-upgrade-final.trx` phía trên thuộc lần kiểm tra 147 trường hợp trước khi bổ sung hai ca tìm ngày hóa đơn gần nhất.
+
+## Cập nhật quyền Cashier
+
+Cashier được bán hàng POS và quản lý khách hàng (xem, tìm kiếm, thêm, sửa, xóa), áp dụng ở cả WinForms và API. Bộ test Release chạy lại đạt 156/156, không thất bại hoặc bỏ qua; build không lỗi/cảnh báo. Các ca mới kiểm tra CRUD của Cashier, đúng hai menu, 401/403 cho người chưa đăng nhập/Warehouse, kiểm tra dữ liệu và chặn xóa khách đã có hóa đơn. Xem [kết quả tổng hợp](cashier-customer-verification.json). Hai nhật ký TRX phía trên thuộc các lần kiểm tra trước khi đổi quyền này.

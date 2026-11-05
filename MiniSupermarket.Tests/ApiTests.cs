@@ -81,7 +81,7 @@ namespace MiniSupermarket.Tests
         [InlineData("cashier01", "/api/products", HttpStatusCode.Forbidden)]
         [InlineData("cashier01", "/api/users", HttpStatusCode.Forbidden)]
         [InlineData("cashier01", "/api/reports/quick?date=2026-10-08", HttpStatusCode.Forbidden)]
-        [InlineData("cashier01", "/api/customers", HttpStatusCode.Forbidden)]
+        [InlineData("cashier01", "/api/customers", HttpStatusCode.OK)]
         [InlineData("cashier01", "/api/customers/phone/0901122334", HttpStatusCode.OK)]
         [InlineData("cashier01", "/api/products/barcode/8935001710011", HttpStatusCode.OK)]
         [InlineData("ware01", "/api/categories", HttpStatusCode.OK)]
@@ -165,9 +165,6 @@ namespace MiniSupermarket.Tests
         [InlineData("POST", "/api/users")]
         [InlineData("PUT", "/api/users/1/password")]
         [InlineData("PUT", "/api/users/1/status")]
-        [InlineData("POST", "/api/customers")]
-        [InlineData("PUT", "/api/customers/1")]
-        [InlineData("DELETE", "/api/customers/1")]
         public async Task CashierCannotMutateProtectedResources(string method, string endpoint)
         {
             using var app = new ApiFactory();

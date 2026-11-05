@@ -85,7 +85,13 @@ namespace MiniSupermarket.Tests
                         SessionManager.CurrentRole = role;
                         typeof(FormMainShell).GetMethod("ApplyRolePermissions", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(shell, null);
                         var names = new[] { "btnPOS", "btnCategory", "btnProduct", "btnCustomer", "btnReports", "btnUserManage" };
-                        Assert.Equal(role == "Admin" ? 6 : role == "Cashier" ? 1 : 2, names.Count(name => shell.Controls.Find(name, true).Single().Visible));
+                        var expectedMenus = role switch
+                        {
+                            "Admin" => names,
+                            "Cashier" => new[] { "btnPOS", "btnCustomer" },
+                            _ => new[] { "btnCategory", "btnProduct" }
+                        };
+                        Assert.Equal(expectedMenus.OrderBy(name => name), names.Where(name => shell.Controls.Find(name, true).Single().Visible).OrderBy(name => name));
                     }
                     SessionManager.CurrentRole = "Admin";
                     typeof(FormMainShell).GetMethod("ApplyRolePermissions", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(shell, null);
@@ -134,7 +140,7 @@ namespace MiniSupermarket.Tests
                         {
                             (typeof(FormCategoryManagement), new[] { "btnAdd", "btnUpdate", "btnDelete" }, role != "Cashier"),
                             (typeof(FormProductManagement), new[] { "btnAdd", "btnUpdate", "btnDelete" }, role != "Cashier"),
-                            (typeof(FormCustomerManagement), new[] { "btnAdd", "btnUpdate", "btnDelete" }, role == "Admin"),
+                            (typeof(FormCustomerManagement), new[] { "btnAdd", "btnUpdate", "btnDelete" }, role is "Admin" or "Cashier"),
                             (typeof(FormQuickReport), new[] { "btnRunRange" }, role == "Admin"),
                             (typeof(FormUserManagement), new[] { "btnAddUser", "btnResetPassword", "btnToggleLock" }, role == "Admin")
                         })

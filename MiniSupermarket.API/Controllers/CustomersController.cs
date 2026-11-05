@@ -8,7 +8,8 @@ namespace MiniSupermarket.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    // [Tiêu chí 30] Admin và Cashier được quản lý khách hàng; Warehouse không có quyền truy cập.
+    [Authorize(Roles = "Admin,Cashier")]
     public class CustomersController : ControllerBase
     {
         private readonly SupermarketDbContext _context;
@@ -27,7 +28,6 @@ namespace MiniSupermarket.API.Controllers
         // GET /api/customers
         [HttpGet]
         [ProducesResponseType(typeof(List<CustomerDto>), StatusCodes.Status200OK)]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll()
         {
             var customers = await ReadCustomers()
@@ -41,7 +41,6 @@ namespace MiniSupermarket.API.Controllers
         [HttpGet("paged")]
         [ProducesResponseType(typeof(PagedResult<CustomerDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetPaged(string? keyword, int pageNumber = 1, int pageSize = 5, CancellationToken cancellationToken = default)
         {
             var query = ReadCustomers();
@@ -60,7 +59,6 @@ namespace MiniSupermarket.API.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(CustomerDto), StatusCodes.Status200OK)]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetById(int id)
         {
             var customer = await ReadCustomers().FirstOrDefaultAsync(c => c.CustomerId == id);
@@ -80,7 +78,6 @@ namespace MiniSupermarket.API.Controllers
         [HttpGet("search")]
         [ProducesResponseType(typeof(List<CustomerDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Search([FromQuery] string keyword)
         {
             if (string.IsNullOrWhiteSpace(keyword))
@@ -106,7 +103,6 @@ namespace MiniSupermarket.API.Controllers
         // POST /api/customers
         [HttpGet("phone/{phone}")]
         [ProducesResponseType(typeof(CustomerDto), StatusCodes.Status200OK)]
-        [Authorize(Roles = "Admin,Cashier")]
         public async Task<IActionResult> GetByPhone(string phone)
         {
             var customer = await ReadCustomers()
@@ -118,7 +114,6 @@ namespace MiniSupermarket.API.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(CustomerDto), StatusCodes.Status201Created)]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] CustomerRequest request)
         {
             if (!ModelState.IsValid)
@@ -156,7 +151,6 @@ namespace MiniSupermarket.API.Controllers
 
         // PUT /api/customers/{id}
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(int id, [FromBody] CustomerRequest request)
         {
             if (!ModelState.IsValid)
@@ -194,7 +188,6 @@ namespace MiniSupermarket.API.Controllers
 
         // DELETE /api/customers/{id}
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var customer = await _context.Customers

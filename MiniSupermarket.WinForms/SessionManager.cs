@@ -12,11 +12,11 @@ namespace MiniSupermarket.WinForms
         public static string CurrentFullName { get; set; } = string.Empty;
         public static string CurrentRole { get; set; } = string.Empty;
 
-        // [Tiêu chí 30] Phân quyền giao diện: Admin toàn quyền, Cashier chỉ POS, Warehouse quản lý nhóm hàng/sản phẩm; API vẫn kiểm tra Role riêng.
+        // [Tiêu chí 30] Phân quyền giao diện: Admin toàn quyền, Cashier bán hàng và quản lý khách hàng, Warehouse quản lý nhóm hàng/sản phẩm; API vẫn kiểm tra Role riêng.
         public static bool CanAccess(string screen) => CurrentRole switch
         {
             "Admin" => true,
-            "Cashier" => screen == "POS",
+            "Cashier" => screen is "POS" or "Customer",
             "Warehouse" => screen is "Category" or "Product",
             _ => false
         };

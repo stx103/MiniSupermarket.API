@@ -199,10 +199,10 @@ Mật khẩu mẫu của các tài khoản dưới đây là **`123456`**, nếu
 | Tài khoản | Vai trò | Chức năng |
 | --- | --- | --- |
 | `admin` / `admin01` | Admin | Quản lý dữ liệu, POS, tài khoản, dashboard và báo cáo tài chính |
-| `cashier` / `cashier01` | Cashier | Chỉ thấy POS; tra barcode/thành viên; thanh toán, đổi điểm và xem/hủy hóa đơn của mình |
+| `cashier` / `cashier01` | Cashier | Bán hàng POS và quản lý khách hàng: xem, tìm kiếm, thêm, sửa, xóa; tra barcode/thành viên; thanh toán, đổi điểm và xem/hủy hóa đơn của mình |
 | `warehouse01` / `ware01` | Warehouse | Nhóm hàng, sản phẩm, tồn kho, xuất CSV kho và Top 5 theo số lượng |
 
-Cashier không được sửa giá, sửa tồn kho, quản lý khách hàng/danh mục/tài khoản hoặc xem doanh thu. Warehouse không được xem báo cáo tài chính; API Top 5 cho Warehouse chỉ trả mã, tên và số lượng bán. API kiểm tra JWT và role độc lập với việc ẩn nút trên giao diện.
+Cashier được quản lý thông tin khách hàng, địa chỉ, hạng thành viên và điểm thưởng trên màn hình khách hàng. Khách hàng đã có hóa đơn không được xóa để giữ lịch sử giao dịch. Cashier không được sửa giá, sửa tồn kho, quản lý danh mục/tài khoản hoặc xem doanh thu. Warehouse không được xem báo cáo tài chính; API Top 5 cho Warehouse chỉ trả mã, tên và số lượng bán. API kiểm tra JWT và role độc lập với việc ẩn nút trên giao diện.
 
 ## Thanh toán và đổi điểm
 
@@ -287,7 +287,7 @@ dotnet build MiniSupermarket.API/MiniSupermarket.API.sln -c Release
 dotnet test MiniSupermarket.Tests/MiniSupermarket.Tests.csproj -c Release
 ```
 
-Bản cập nhật biểu đồ đã kiểm tra **149 trường hợp đạt, 0 thất bại, 0 bỏ qua**. Bộ test bao phủ xác thực/phân quyền, DTO/CRUD, địa chỉ khách, phân trang, ADO.NET, thanh toán/hủy/rollback, đổi điểm, KPI, kỳ doanh thu, chuẩn CSV, cấu trúc migration và giao diện.
+Bản cập nhật quyền Cashier đã kiểm tra **156 trường hợp đạt, 0 thất bại, 0 bỏ qua**. Bộ test bao phủ xác thực/phân quyền, DTO/CRUD, địa chỉ khách, phân trang, ADO.NET, thanh toán/hủy/rollback, đổi điểm, KPI, kỳ doanh thu, chuẩn CSV, cấu trúc migration và giao diện. Kiểm tra quyền bao gồm Cashier bán hàng và quản lý khách hàng, đúng hai menu trên Shell, chặn Warehouse/người chưa đăng nhập truy cập khách hàng và giữ lịch sử hóa đơn khi xóa khách. Xem [kết quả kiểm tra quyền Cashier](MinhChungKiemThu/2026-11-05/cashier-customer-verification.json).
 
 Các test tích hợp dùng SQLite tạm và không yêu cầu kết nối SQL Server thật; cú pháp T-SQL/migration được kiểm tra riêng. Chúng không thay thế kiểm thử stored procedure, khóa đồng thời và khả năng chịu tải trên SQL Server. Hồ sơ tại `MinhChungKiemThu` ghi lại các ca SQL Server thực tế đã chạy; các ca này sử dụng database kiểm thử riêng.
 

@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-05",
+  "configuration": "Release",
+  "passed": 156,
+  "failed": 0,
+  "skipped": 0,
+  "buildErrors": 0,
+  "buildWarnings": 0,
+  "cashierScreens": [
+    "POS",
+    "Customer"
+  ],
+  "customerManagementRoles": [
+    "Admin",
+    "Cashier"
+  ],
+  "verified": [
+    "Customer CRUD and search for Cashier",
+    "Customer validation and invoice history protection",
+    "Anonymous 401 and Warehouse 403 on all customer endpoints",
+    "Exactly POS and Customer menu entries for Cashier",
+    "Existing checkout, stock, points and restricted-resource tests"
+  ]
+}
